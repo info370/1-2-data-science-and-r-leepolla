@@ -18,9 +18,9 @@ When you save the notebook, an HTML file containing the code and output will be 
 Read more about it in Chapter 12 of the [INFO 201 textbook](https://info201.github.io/)
 
 ### 1) Write 3 things from the INFO 201 textbook that were confusing:
-1.1) *TODO*
+1.1) Different syntax between ggplot and plotly are confusing
 
-1.2) *TODO*
+1.2) 
 
 1.3) *TODO*
 
@@ -28,13 +28,13 @@ Read more about it in Chapter 12 of the [INFO 201 textbook](https://info201.gith
 ### Vectors
 ```{r}
 # Set variable vec_even to a vector of even numbers from 2 to 100 (inclusive). 
-vec_even <- #TODO
+vec_even <- c(1:50) * 2
 
 # Set variable vec_odd to a vector of odd numbers from 1 to 99 (inclusive).
-vec_odd <- #TODO
+vec_odd <- vec_even - 1
 
 # Set variable vec_sum to the sum of vec_even and vec_odd.
-vec_sum <- #TODO
+vec_sum <- vec_even + vec_odd
 
 # Work on 2.1 below
   
@@ -44,7 +44,22 @@ How many values in vec_sum are greater than the mean?
 
 2.1) *TODO*: Write a function get_upper which takes in a vector of numbers and returns the number of values which are greater than the mean. So get_upper(c(1,3,2,5)) would return 2.
 
+```{r}
+get_upper <- function(x) {
+avg <- mean(x)
+return (sum(as.numeric(unlist(x)) > as.list(mean), na.rm = TRUE))
+}
+
+get_upper(c(1,3,2,5))
+
+```
+
 2.2) *TODO*: How many values in vec_sum are greater than the mean?
+
+```{r}
+get_upper(vec_sum)
+
+```
 
 ### Importing libraries
 Now we're just importing some libraries. If you get errors when you run this, you may need to install some packages (see Ch 10.2).
@@ -66,6 +81,15 @@ View(mtcars) # see the dataframe
   
 # Show work for 3.1-3.4 here!
 
+mean(mtcars$hp)
+
+mean(unlist(select(filter(select(mtcars, cyl, hp), cyl == 4), hp)))
+
+mean(unlist(select(filter(select(mtcars, mpg, disp), disp < 200 & disp > 100), mpg)))
+
+ggplot(mtcars, aes_string(x = mtcars$disp, y = mtcars$mpg)) + geom_point()
+
+
 ```
 What is the mean horsepower for all cars?
 3.1) *TODO*
@@ -86,16 +110,20 @@ MPG_KML_RATIO <- 0.35400619 # 1 Miles/Gallon = 0.35 Kilometer/Liter
 CIN_L_RATIO <- 0.0163871 # 1 cubic inch = 0.016 Liter
 
 # Add a column "kml" to the mtcars dataframe which provides the kilometers / liter for each car. The conversion from MPG to KML is provided by MPG_KML_RATIO.
-mtcars$kml <- #TODO
+mtcars$kml <- mtcars$mpg * MPG_KML_RATIO
   
 # Add a column "disp_l" to the mtcars dataframe which provides the displacement for each car in liters. The conversion from cubic inches to liters is provided by CIN_L_RATIO.
-mtcars$disp_l <- #TODO
+mtcars$disp_l <- mtcars$disp * CIN_L_RATIO
 
 # Convert mtcars$cyl to a factor (see Chapter 9.3)
-mtcars$cyl <- #TODO
+mtcars$cyl <- as.factor(mtcars$cyl)
 
 # Show 4.1 and 4.2 below!
 
+  ggplot(mtcars, aes(x = mtcars$disp_l, y = mtcars$kml, color = mtcars$cyl)) + geom_point()
+  
+  # It seems that having fewer cylinders and lower displacement is associated with higher kilometers/liter
+  
 ```
 
 4.1) *TODO* Use ggplot to plot the relationship between vehicle displacement in liters and kilometers/liter. Color the points by number of cylinder. Give the plot a title, label both axes.
@@ -113,6 +141,14 @@ boston <- Boston
 View(boston) # Viewing data
 
 
+# Each row is a town within Boston
+
+median(unlist(select(top_n(filter(boston, chas == 1), 5, crim), medv)))
+
+median(unlist(select(top_n(filter(boston, chas == 0), 5, crim), medv)))
+
+
+
 ```
 What does a row in the Boston dataset represent?
 5.1) *TODO* 
@@ -126,5 +162,7 @@ What is the median value of owner-occupied homes for the 5 neighborhoods with th
 
 Last question: How long did this assignment take you?
 6.1) *TODO*
+
+I spent about 2.5 hours doing this assignment
 
 That's it for this assignment. Great job!
